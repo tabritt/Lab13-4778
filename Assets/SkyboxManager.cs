@@ -59,7 +59,7 @@ public class WeatherSkyboxManager : MonoBehaviour
     }
     private void SetSunPosition(int sunriseUnix, int sunsetUnix, int timezoneOffset)
     {
-        // Convert to local time
+        // 
         DateTime sunrise = DateTimeOffset.FromUnixTimeSeconds(sunriseUnix + timezoneOffset).DateTime;
         DateTime sunset = DateTimeOffset.FromUnixTimeSeconds(sunsetUnix + timezoneOffset).DateTime;
         DateTime now = DateTime.UtcNow.AddSeconds(timezoneOffset);
@@ -71,7 +71,7 @@ public class WeatherSkyboxManager : MonoBehaviour
         // Clamp so we stay in range
         float t = Mathf.InverseLerp(0f, totalDaySeconds, elapsedSeconds);
 
-        // Convert 0–1 progress to a sun angle (0° = sunrise, 180° = sunset)
+        // Convert 0–1 progress to a sun angle (0 = sunrise, 180 = sunset)
         float sunAngle = Mathf.Lerp(0f, 180f, t);
 
         // Apply rotation (sun travels on X axis)
