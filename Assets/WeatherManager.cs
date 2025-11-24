@@ -21,8 +21,7 @@ public abstract class WeatherManager : MonoBehaviour
     private IEnumerator GetWeatherRoutine()
     {
         string url = $"{apiBase}?lat={latitude}&lon={longitude}&appid={apiKey}&units=metric";
-
-        Debug.Log("Requesting: " + url);
+        Debug.Log("Requesting URL: " + url);
 
         using (UnityWebRequest request = UnityWebRequest.Get(url))
         {
@@ -39,11 +38,27 @@ public abstract class WeatherManager : MonoBehaviour
                 yield break;
             }
 
-            WeatherResponse data = JsonUtility.FromJson<WeatherResponse>(request.downloadHandler.text);
-            string condition = data.weather[0].main;
+            Debug.Log("Weather API Response: " + request.downloadHandler.text);
 
-            weatherSkyboxManager.ApplyWeather(condition);
+            WeatherResponse data = JsonUtility.FromJson<WeatherResponse>(request.downloadHandler.text);
+
+            if (data != null && data.weather.Length > 0)
+            {
+                string condition = data.weather[0].main;
+                Debug.Log($"Weather Condition: {condition}, Temperature: {data.main.temp}°C");
+
+                // Apply skybox based on weather
+                weatherSkyboxManager.ApplyWeather(condition);
+
+                // Set sun position based on sunrise, sunset, and timezone
+                weatherSkyboxManager.SetSunPosition(data.sys.sunrise, data.sys.sunset, data.timezone);
+            }
+            else
+            {
+                Debug.LogWarning("Weather data is empty or invalid!");
+            }
         }
     }
+
 }
 

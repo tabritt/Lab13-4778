@@ -57,7 +57,7 @@ public class WeatherSkyboxManager : MonoBehaviour
             Debug.LogWarning("No skybox material assigned for condition: " + condition);
         }
     }
-    private void SetSunPosition(int sunriseUnix, int sunsetUnix, int timezoneOffset)
+    public void SetSunPosition(int sunriseUnix, int sunsetUnix, int timezoneOffset)
     {
         // 
         DateTime sunrise = DateTimeOffset.FromUnixTimeSeconds(sunriseUnix + timezoneOffset).DateTime;
